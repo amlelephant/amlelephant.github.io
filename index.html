@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio</title>
+  <link rel="stylesheet" href="css/winxp.css">
+</head>
+<body>
+
+<!-- Desktop -->
+<div class="xp-desktop" id="desktop" oncontextmenu="showContextMenu(event)">
+  <div class="xp-icons" id="desktop-icons"></div>
+  <div id="windows-container"></div>
+</div>
+
+<!-- Taskbar -->
+<div class="xp-taskbar">
+  <div class="xp-start" onclick="toggleStartMenu()">
+    <span style="font-size:18px;">⊞</span>
+    <span>start</span>
+  </div>
+  <div class="xp-tasks" id="taskbar-tasks"></div>
+  <div class="xp-tray">
+    <span>🔊</span>
+    <span class="xp-clock" id="xp-clock">12:00 PM</span>
+  </div>
+</div>
+
+<!-- Start Menu -->
+<div class="xp-startmenu" id="startmenu">
+  <div class="xp-startmenu-header">
+    <div class="xp-startmenu-avatar" style="overflow:hidden;padding:0;">
+  <img src="images/profile.jpg"
+       style="width:100%;height:100%;object-fit:cover;"
+       onerror="this.parentElement.innerHTML='👤';this.parentElement.style.cssText='display:flex;align-items:center;justify-content:center;font-size:24px;'">
+</div>
+    <div class="xp-startmenu-name" id="sm-name">Your Name</div>
+  </div>
+  <div class="xp-startmenu-body">
+    <div class="xp-startmenu-left" id="sm-left"></div>
+    <div class="xp-startmenu-right" id="sm-right">
+      <div class="xp-startmenu-item" onclick="openWindow('mycomputer');toggleStartMenu()">
+        <span>🖥️</span><span>My Computer</span>
+      </div>
+    </div>
+  </div>
+  <div class="xp-startmenu-footer">
+    <div class="xp-startmenu-item" style="color:#900;" onclick="alert('Goodbye! 👋')">
+      <span>⏻</span><span>Shut Down</span>
+    </div>
+  </div>
+</div>
+
+<!-- Context menu -->
+<div class="xp-contextmenu" id="contextmenu">
+  <div class="xp-context-item" onclick="closeContextMenu()">Arrange Icons By ▶</div>
+  <div class="xp-context-item" onclick="closeContextMenu();location.reload()">Refresh</div>
+  <div class="xp-context-sep"></div>
+  <div class="xp-context-item" onclick="closeContextMenu()">Properties</div>
+</div>
+
+<!-- data.js must come first, then github.js, then winxp.js -->
+<script src="js/data.js"></script>
+<script src="js/github.js"></script>
+<script src="js/winxp.js"></script>
+</body>
+</html>

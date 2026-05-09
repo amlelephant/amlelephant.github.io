@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>~/terminal</title>
+  <link rel="stylesheet" href="css/crt.css">
+</head>
+<body>
+<div class="crt-outer">
+  <div class="crt-bezel">
+    <div class="crt-screen">
+      <div class="crt-noise"></div>
+
+      <div class="crt-content">
+
+        <!-- HOME SCREEN -->
+        <div id="screen-home">
+          
+
+          <div class="crt-menu" id="crt-menu">
+            <div class="crt-menu-label glow-dim">═══ SELECT ═══</div>
+            <!-- rows injected by JS -->
+          </div>
+
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="crt-cursor"></span>
+            <span class="glow-dim" style="font-size:12px;letter-spacing:1px;">AWAITING INPUT</span>
+          </div>
+
+          <div class="crt-hint">↑↓ NAVIGATE &nbsp;·&nbsp; ENTER SELECT &nbsp;·&nbsp; 1–4 SHORTCUT</div>
+        </div>
+
+        <!-- NANO VIEWER -->
+        <div id="screen-page">
+          <div class="nano-topbar" id="nano-topbar-title">GNU nano — PAGE</div>
+          <div class="nano-body" id="nano-body"></div>
+          <div class="nano-bottombar">
+            <span><span class="nano-key">^X</span> Exit</span>
+            <span><span class="nano-key">↑↓</span> Scroll</span>
+            <span><span class="nano-key">PgUp/Dn</span> Page</span>
+            <span><span class="nano-key">ESC</span> Back</span>
+          </div>
+        </div>
+
+      </div><!-- .crt-content -->
+
+      <div class="crt-theme-hint">
+        <a href="index.html">⬡ BACK TO WINDOWS XP</a>
+      </div>
+
+    </div><!-- .crt-screen -->
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/crt.js"></script>
+</body>
+</html>
