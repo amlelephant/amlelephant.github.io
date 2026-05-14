@@ -12,7 +12,7 @@ const PORTFOLIO = {
   // 
   bio: "Hi! I'm a Computer Science and Mathmatics student passionate about solving " +
        "complex problems. I enjoy participating in competitive programming and " +
-       "making projects in fields I genuinely enjoy. I am currently" +
+       "making projects in fields I genuinely enjoy. I am currently searching for " +
        "internship opportunities where I can learn fast and contribute " +
        "meaningfully from day one.",
 
@@ -22,8 +22,11 @@ const PORTFOLIO = {
   
 
   github_exclude: [
-    "amlelephant.github.io",   // portfolio repo itself
+    //"amlelephant.github.io",   // portfolio repo itself
     //"some-private-fork",        // anything else you want hidden
+    "piPicoFishTankFiller",
+    "amlelephant",
+    "afternoon",
   ],
 
   // ── Education ──────────────────────────────────────────────
@@ -32,7 +35,7 @@ const PORTFOLIO = {
     school: "University of Texas at Austin",
     degree: "B.S. Computer Science and B.S. Mathmatics",
     dates:  "2026 – Present",
-    //gpa:    "Starting this Fall",
+    gpa:    "Starting this Fall",
     details: "Relevant Coursework: Data Structures, Multivariable Calculus, Algorithims",
   },
   {
