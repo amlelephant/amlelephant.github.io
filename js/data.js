@@ -7,18 +7,19 @@ const PORTFOLIO = {
   email:    "aiden.m.lowery@gmail.com",
   github:   "https://github.com/amlelephant",
   linkedin: "https://linkedin.com/in/aiden_lowery",
+  leetcode: "https://leetcode.com/u/amlelephant/",
 
-  
-
-  bio: "Hi! I'm a Computer Science student passionate about building things " +
-       "that live on the internet. I love clean code, creative interfaces, " +
-       "and solving problems that actually matter. Currently looking for " +
+  // 
+  bio: "Hi! I'm a Computer Science and Mathmatics student passionate about solving " +
+       "complex problems. I enjoy participating in competitive programming and " +
+       "making projects in fields I genuinely enjoy. I am currently" +
        "internship opportunities where I can learn fast and contribute " +
        "meaningfully from day one.",
 
 
 
   github_username: "amlelephant",
+  
 
   github_exclude: [
     "amlelephant.github.io",   // portfolio repo itself
@@ -37,7 +38,7 @@ const PORTFOLIO = {
   {
     school:  "Friendswood High School",
     degree:  "High School Diploma",
-    dates:   "2021 – 2026",
+    dates:   "2022 – 2026",
     gpa:     "4.0",       // leave empty to hide the GPA line
     details: "Graduated ranked 11/475 in my class",
   },
