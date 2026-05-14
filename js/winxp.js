@@ -236,7 +236,7 @@ function renderAbout() {
             <a href="${p.github}" class="xp-link" target="_blank">${p.github.replace('https://','')}</a></div>
           <div class="xp-info-row"><span class="xp-info-key">🔗 LinkedIn:</span>
             <a href="${p.linkedin}" class="xp-link" target="_blank">${p.linkedin.replace('https://','')}</a></div>
-            <div class="xp-info-row"><span class="xp-info-key">🔗 LinkedIn:</span>
+            <div class="xp-info-row"><span class="xp-info-key">🤖 Leetcode:</span>
             <a href="${p.leetcode}" class="xp-link" target="_blank">${p.leetcode.replace('https://','')}</a></div>
         </div>
       </div>

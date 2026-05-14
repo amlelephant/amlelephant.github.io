@@ -32,14 +32,14 @@ const PORTFOLIO = {
     school: "University of Texas at Austin",
     degree: "B.S. Computer Science and B.S. Mathmatics",
     dates:  "2026 – Present",
-    gpa:    "Starting this Fall",
+    //gpa:    "Starting this Fall",
     details: "Relevant Coursework: Data Structures, Multivariable Calculus, Algorithims",
   },
   {
     school:  "Friendswood High School",
     degree:  "High School Diploma",
     dates:   "2022 – 2026",
-    gpa:     "4.0",       // leave empty to hide the GPA line
+    gpa:     "4.0",       
     details: "Graduated ranked 11/475 in my class",
   },
   ],
