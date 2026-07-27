@@ -6,7 +6,7 @@ const PORTFOLIO = {
   location: "Austin, Texas",
   email:    "aiden.m.lowery@gmail.com",
   github:   "https://github.com/amlelephant",
-  linkedin: "https://linkedin.com/in/aiden_lowery",
+  linkedin: "https://www.linkedin.com/in/aiden-lowery-793317425/",
   leetcode: "https://leetcode.com/u/amlelephant/",
 
   // 
