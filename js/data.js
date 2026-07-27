@@ -10,7 +10,7 @@ const PORTFOLIO = {
   leetcode: "https://leetcode.com/u/amlelephant/",
 
   // 
-  bio: "Hi! I'm a Computer Science and Mathmatics student passionate about solving " +
+  bio: "Hi! I'm a Computer Science and Mathematics student passionate about solving " +
        "complex problems. I enjoy participating in competitive programming and " +
        "making projects in fields I genuinely enjoy. I am currently searching for " +
        "internship opportunities where I can learn fast and contribute " +
@@ -33,7 +33,7 @@ const PORTFOLIO = {
   education: [
   {
     school: "University of Texas at Austin",
-    degree: "B.S. Computer Science and B.S. Mathmatics",
+    degree: "B.S. Computer Science and B.S. Mathematics",
     dates:  "2026 – Present",
     gpa:    "Starting this Fall",
     details: "Relevant Coursework: Data Structures, Multivariable Calculus, Algorithims",
