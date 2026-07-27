@@ -43,7 +43,7 @@ const PORTFOLIO = {
     degree:  "High School Diploma",
     dates:   "2022 – 2026",
     gpa:     "4.0",       
-    details: "Graduated ranked 11/475 in my class",
+    details: "Graduated ranked 10/475 in my class",
   },
   ],
 
@@ -52,7 +52,7 @@ const PORTFOLIO = {
   
 
   // ── Skills ─────────────────────────────────────────────────
-  skills: ["Python", "Flask", "HTML/CSS", "C++", "C", "Java", "CAD"],
+  skills: ["Python", "Flask", "HTML/CSS", "C++", "C", "Java", "CAD", "Django"],
 
   // ── Projects ───────────────────────────────────────────────
   projects: [
