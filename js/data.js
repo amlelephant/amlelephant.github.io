@@ -24,9 +24,21 @@ const PORTFOLIO = {
   github_exclude: [
     //"amlelephant.github.io",   // portfolio repo itself
     //"some-private-fork",        // anything else you want hidden
+    "amlelephant",                // profile-config repo, nothing to show
+    "afternoon",                  // unfinished; also being made private
+  ],
+
+  // Projects listed here appear first, in this exact order. Everything
+  // else follows, most recently pushed first. Reorder freely — this is
+  // the one place that controls what a visitor sees at the top.
+  github_featured: [
+    "Financial-Trading-Platform-algos",
+    "amlelephant.github.io",
+    "ulmannConstruction",
+    "journal",
+    "Windows-desktop-app-testing",
+    "Drone",
     "piPicoFishTankFiller",
-    "amlelephant",
-    "afternoon",
   ],
 
   // ── Education ──────────────────────────────────────────────
