@@ -40,9 +40,10 @@ const PORTFOLIO = {
   //
   // Last synced to pins: 2026-08-14
   github_featured: [
+    "Cube-Solver",
     "amlelephant.github.io",
-    "Drone",
     "Financial-Trading-Platform-algos",
+    "Drone",
     "journal",
     "piPicoFishTankFiller",
   ],
@@ -109,7 +110,7 @@ const PORTFOLIO = {
     {
       role:    "Team Member",
       company: "Walgreens — Friendswood, TX",
-      dates:   "2024 – 2026",
+      dates:   "Summer 2026",
       bullets: [
         "Built customer relationships and handled transactions and photo printing.",
         "Troubleshot point-of-sale and printing errors as they came up.",

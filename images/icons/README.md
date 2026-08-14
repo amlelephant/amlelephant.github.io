@@ -16,7 +16,7 @@ whenever the file is missing, so a half-finished set never looks broken.
 | `github.png`     | done   | Contact window card                       |
 | `linkedin.png`   | done   | Contact window card                       |
 | `drive-c.png`    | done   | My Computer → Drives (Local Disk C:)      |
-| `drive-d.png`    | **TODO** | My Computer → Drives (CD Drive D:) — still falls back to the 📀 emoji, which clashes with the hand-drawn C: icon sitting next to it. A disc shape would finish the row. |
+| `drive-d.png`    | done   | My Computer → Drives (CD Drive D:)        |
 | `terminal.png`   | **TODO** | CRT easter-egg desktop icon. Only needed if the block near `winxp.js:118` is uncommented. |
 
 ## Transparency — read this before redrawing
