@@ -396,6 +396,32 @@ html, body { height: 100%; overflow: hidden; font-family: var(--xp-font); font-s
 /* Profile card layout for About */
 .xp-profile-grid { display: grid; grid-template-columns: 190px 1fr; gap: 18px; margin-bottom: 14px; }
 @media (max-width: 500px) { .xp-profile-grid { grid-template-columns: 1fr; } }
+
+/* ── Mobile ──────────────────────────────────────────────────
+   Breakpoints must match MOBILE_BREAKPOINT / SHORT_BREAKPOINT in
+   js/winxp.js. The max-height clause catches a phone in landscape, which is
+   wider than 768px but far too short for a full-size window.
+   Windows are centred by centerWindow() and fixed in place: the desktop
+   metaphor does not survive a touchscreen, and drag was mouse-only so an
+   off-screen window could never be recovered. */
+@media (max-width: 768px), (max-height: 500px) {
+  /* 360px was wider than a phone viewport, which pushed windows off the
+     right edge no matter what width the JS asked for. */
+  .xp-window { min-width: 0; min-height: 0; }
+
+  /* No drag affordance, since dragging is disabled */
+  .xp-titlebar { cursor: default; }
+
+  /* Roomier hit targets for the title bar buttons */
+  .xp-btn { width: 22px; height: 20px; }
+
+  /* The address bar is decorative and eats vertical space on a phone */
+  .xp-addressbar { display: none; }
+
+  /* Let long repo names and URLs wrap instead of forcing a sideways scroll */
+  .page-body { word-break: break-word; }
+  .xp-info-key { min-width: 0; margin-right: 6px; }
+}
 .xp-profile-card {
   background: linear-gradient(180deg, #ddeeff, #c8dff8);
   border: 1px solid #7f9db9;

@@ -161,6 +161,75 @@ document.getElementById('desktop').addEventListener('click', e => {
 let zCounter = 20;
 const openWindows = {};
 
+// ── Mobile behaviour ───────────────────────────────────────
+//  On a phone the XP desktop metaphor falls apart: windows used to spawn at
+//  left:90px with a 24px cascade and a 360px CSS min-width, so on a 390px
+//  screen they hung off the right edge — and because dragging was bound to
+//  mouse events only, there was no way to pull them back. Below this
+//  breakpoint windows are centred and fixed in place instead.
+//
+//  The height clause matters: a phone in landscape is ~844x390, which is
+//  wider than the width breakpoint but far too short for a 550px window.
+//  Without it, rotating a phone dropped the page back into desktop mode and
+//  the window hung off the bottom of the screen.
+//
+//  Keep this in sync with the @media block in css/winxp.css.
+const MOBILE_BREAKPOINT = 768;
+const SHORT_BREAKPOINT  = 500;
+const mobileQuery = window.matchMedia(
+  `(max-width: ${MOBILE_BREAKPOINT}px), (max-height: ${SHORT_BREAKPOINT}px)`
+);
+function isMobile() { return mobileQuery.matches; }
+
+/** Size a window to the viewport and centre it in the desktop area. */
+function centerWindow(win) {
+  const desk = document.getElementById('desktop');
+  const availW = desk.clientWidth;
+  const availH = desk.clientHeight;   // already excludes the taskbar
+  const margin = isMobile() ? 8 : 50;
+
+  const w = Math.min(740, availW - margin * 2);
+  const h = Math.min(550, availH - margin * 2);
+
+  win.style.width  = w + 'px';
+  win.style.height = h + 'px';
+  win.style.left   = Math.max(0, Math.round((availW - w) / 2)) + 'px';
+  win.style.top    = Math.max(0, Math.round((availH - h) / 2)) + 'px';
+}
+
+// Windows are immovable on mobile, so a rotation or resize would otherwise
+// strand them off-screen or hanging past the bottom edge.
+let _resizeTimer = null;
+window.addEventListener('resize', () => {
+  clearTimeout(_resizeTimer);
+  _resizeTimer = setTimeout(() => {
+    const desk = document.getElementById('desktop');
+    const maxW = desk.clientWidth, maxH = desk.clientHeight;
+
+    Object.values(openWindows).forEach(e => {
+      const el = e.el;
+
+      // Maximised windows were sized in pixels, so they need refitting too
+      if (e.maximized) {
+        el.style.width  = maxW + 'px';
+        el.style.height = maxH + 'px';
+        return;
+      }
+
+      if (isMobile()) { centerWindow(el); return; }
+
+      // Desktop: shrink and pull back anything that no longer fits, so a
+      // window can never end up unreachable past an edge.
+      const w = Math.min(el.offsetWidth,  maxW);
+      const h = Math.min(el.offsetHeight, maxH);
+      el.style.width  = w + 'px';
+      el.style.height = h + 'px';
+      el.style.left = Math.max(0, Math.min(parseInt(el.style.left, 10) || 0, maxW - w)) + 'px';
+      el.style.top  = Math.max(0, Math.min(parseInt(el.style.top,  10) || 0, maxH - h)) + 'px';
+    });
+  }, 120);
+});
+
 async function openWindow(pageId) {
   closeStartMenu();
   if (openWindows[pageId]) {
@@ -173,14 +242,24 @@ async function openWindow(pageId) {
   const pg = PAGES[pageId];
   if (!pg) return;
 
-  const offset = Object.keys(openWindows).length * 24;
-  const w = Math.min(740, window.innerWidth  - 100);
-  const h = Math.min(550, window.innerHeight - 100);
-
   const win = document.createElement('div');
   win.className = 'xp-window focused';
   win.id = `win-${pageId}`;
-  win.style.cssText = `left:${90+offset}px;top:${30+offset}px;width:${w}px;height:${h}px;position:absolute;display:flex;flex-direction:column;`;
+  win.style.cssText = 'position:absolute;display:flex;flex-direction:column;';
+
+  if (isMobile()) {
+    // Always centred, no cascade — there is nowhere to cascade to.
+    centerWindow(win);
+  } else {
+    const offset = Object.keys(openWindows).length * 24;
+    const w = Math.min(740, window.innerWidth  - 100);
+    const h = Math.min(550, window.innerHeight - 100);
+    win.style.left   = (90 + offset) + 'px';
+    win.style.top    = (30 + offset) + 'px';
+    win.style.width  = w + 'px';
+    win.style.height = h + 'px';
+  }
+
   win.innerHTML = buildWindowShell(pageId, pg);
   document.getElementById('windows-container').appendChild(win);
 
@@ -482,6 +561,9 @@ function setupDrag(win) {
   let dragging = false, ox = 0, oy = 0;
   tb.addEventListener('mousedown', e => {
     if (e.target.closest('.xp-title-buttons')) return;
+    // Immovable on mobile. Checked here rather than skipping the binding so
+    // that resizing or rotating into desktop width restores dragging.
+    if (isMobile()) return;
     const id = win.id.replace('win-', '');
     if (openWindows[id]?.maximized) return;
     dragging = true; ox = e.clientX - win.offsetLeft; oy = e.clientY - win.offsetTop;
