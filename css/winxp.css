@@ -57,6 +57,49 @@ html, body { height: 100%; overflow: hidden; font-family: var(--xp-font); font-s
   font-size: 36px;
   filter: drop-shadow(1px 2px 2px rgba(0,0,0,0.5));
 }
+
+/* ── Custom icon art ─────────────────────────────────────────
+   Any PNG dropped into images/icons/ is rendered by icon() in winxp.js.
+   Draw ONE 48x48 master per icon; the slots below scale it down.
+
+   Rendering mode matters and differs by slot:
+     - 48px slot shows the art 1:1, so `pixelated` keeps it exactly as drawn.
+     - Smaller slots DOWNSCALE. `pixelated` there would drop pixels unevenly
+       and look chewed up, so those use smooth (auto) resampling instead.
+   Slot sizes are the real XP ones: 48 desktop, 32 in-window, 24 start
+   menu, 16 title bar and taskbar. */
+.xp-icon-img img {
+  width: 100%; height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated;   /* 1:1 — preserve the drawn pixels */
+}
+/* Icon slot used inside windows (contact cards, My Computer, drives) */
+.xp-card-icon {
+  width: 32px; height: 32px;
+  margin: 0 auto 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 30px;
+  line-height: 1;
+}
+.xp-card-icon img {
+  width: 100%; height: 100%;
+  object-fit: contain;
+  image-rendering: auto;        /* downscaled — resample smoothly */
+}
+/* Start-menu entries render the same art at a smaller size */
+.xp-startmenu-item img {
+  width: 24px; height: 24px;
+  object-fit: contain;
+  image-rendering: auto;
+}
+/* Title bar and taskbar buttons use the smallest size */
+.xp-title-icon img,
+.xp-task-btn img {
+  width: 16px; height: 16px;
+  object-fit: contain;
+  image-rendering: auto;
+  vertical-align: middle;
+}
 .xp-icon-label {
   color: white;
   font-size: 11px;

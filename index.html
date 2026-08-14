@@ -41,12 +41,13 @@
     <div class="xp-startmenu-left" id="sm-left"></div>
     <div class="xp-startmenu-right" id="sm-right">
       <div class="xp-startmenu-item" onclick="openWindow('mycomputer');toggleStartMenu()">
-        <span>🖥️</span><span>My Computer</span>
+        <span><img src="images/icons/mycomputer.png" alt=""
+             onerror="this.replaceWith(document.createTextNode('🖥️'))"></span><span>My Computer</span>
       </div>
     </div>
   </div>
   <div class="xp-startmenu-footer">
-    <div class="xp-startmenu-item" style="color:#900;" onclick="alert('Goodbye! 👋')">
+    <div class="xp-startmenu-item" style="color:#900;" onclick="alert('Goodbye!')">
       <span>⏻</span><span>Shut Down</span>
     </div>
   </div>

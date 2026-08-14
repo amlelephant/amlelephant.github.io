@@ -1,10 +1,10 @@
 
 
 const MENU_ITEMS = [
-  { key: 'about',    label: 'ABOUT ME',  icon: '👤' },
-  { key: 'projects', label: 'PROJECTS',  icon: '🚀' },
-  { key: 'resume',   label: 'RESUME',    icon: '📄' },
-  { key: 'contact',  label: 'CONTACT',   icon: '📬' },
+  { key: 'about',    label: 'ABOUT ME',  icon: '' },
+  { key: 'projects', label: 'PROJECTS',  icon: '' },
+  { key: 'resume',   label: 'RESUME',    icon: '' },
+  { key: 'contact',  label: 'CONTACT',   icon: '' },
 ];
 
 // ── Build menu rows ────────────────────────────────────────
@@ -39,13 +39,14 @@ const screenPage = document.getElementById('screen-page');
 const nanoTitle  = document.getElementById('nano-topbar-title');
 const nanoBody   = document.getElementById('nano-body');
 
-function openPage(key) {
+async function openPage(key) {
   const item = MENU_ITEMS.find(m => m.key === key);
   if (!item) return;
   nanoTitle.textContent = `  GNU nano  —  ${item.label}  `;
-  nanoBody.innerHTML = buildContent(key);
+  nanoBody.innerHTML = `<div class="nano-text">LOADING...</div>`;
   screenHome.style.display = 'none';
   screenPage.style.display = 'flex';
+  nanoBody.innerHTML = await buildContent(key);
   nanoBody.scrollTop = 0;
 }
 
@@ -55,13 +56,13 @@ function closeNano() {
 }
 
 // ── Content builders ───────────────────────────────────────
-function buildContent(key) {
+async function buildContent(key) {
   const p = PORTFOLIO;
   switch(key) {
 
     case 'about': return `
       <div class="nano-section">
-        <div class="nano-h1">👤 About Me</div>
+        <div class="nano-h1">About Me</div>
         <div class="nano-row"><span class="nano-key-label">NAME:</span><span class="nano-val">${p.name}</span></div>
         <div class="nano-row"><span class="nano-key-label">ROLE:</span><span class="nano-val">${p.tagline}</span></div>
         <div class="nano-row"><span class="nano-key-label">LOCATION:</span><span class="nano-val">${p.location}</span></div>
@@ -77,11 +78,12 @@ function buildContent(key) {
       <hr class="nano-divider">
       <div class="nano-section">
         <div class="nano-h2">// Education</div>
-        <div class="nano-row"><span class="nano-key-label">SCHOOL:</span><span class="nano-val">${p.education.school}</span></div>
-        <div class="nano-row"><span class="nano-key-label">DEGREE:</span><span class="nano-val">${p.education.degree}</span></div>
-        <div class="nano-row"><span class="nano-key-label">TIMELINE:</span><span class="nano-val">${p.education.dates}</span></div>
-        <div class="nano-row"><span class="nano-key-label">GPA:</span><span class="nano-val">${p.education.gpa}</span></div>
-        <div class="nano-row"><span class="nano-key-label">DETAILS:</span><span class="nano-val">${p.education.details}</span></div>
+        ${p.education.map(ed => `
+        <div class="nano-row"><span class="nano-key-label">SCHOOL:</span><span class="nano-val">${ed.school}</span></div>
+        <div class="nano-row"><span class="nano-key-label">DEGREE:</span><span class="nano-val">${ed.degree}</span></div>
+        <div class="nano-row"><span class="nano-key-label">TIMELINE:</span><span class="nano-val">${ed.dates}</span></div>
+        <div class="nano-row"><span class="nano-key-label">GPA:</span><span class="nano-val">${ed.gpa}</span></div>
+        <div class="nano-row"><span class="nano-key-label">DETAILS:</span><span class="nano-val">${ed.details}</span></div>`).join('<hr class="nano-divider">')}
       </div>
       <hr class="nano-divider">
       <div class="nano-section">
@@ -89,9 +91,18 @@ function buildContent(key) {
         <div>${p.skills.map(s=>`<span class="nano-tag">${s}</span>`).join('')}</div>
       </div>`;
 
-    case 'projects': return `
-      <div class="nano-section"><div class="nano-h1">🚀 Projects</div></div>` +
-      p.projects.map((proj, i) => `
+    // Pulls from the same GitHub fetch the XP theme uses, so both themes
+    // list the same repos in the same order. This used to read the stale
+    // hand-written PORTFOLIO.projects array and showed only one project.
+    case 'projects': {
+      const repos = await fetchGitHubProjects();
+      if (!repos.length) {
+        return `<div class="nano-section"><div class="nano-h1">Projects</div></div>
+                <div class="nano-text">Could not load projects from GitHub.</div>`;
+      }
+      return `
+      <div class="nano-section"><div class="nano-h1">Projects</div></div>` +
+      repos.map((proj, i) => `
         <div class="nano-card">
           <div class="nano-card-title">${i+1}. ${proj.name}</div>
           <div class="nano-card-meta">YEAR: ${proj.year} &nbsp;|&nbsp; STACK: ${proj.tech.join(', ')}</div>
@@ -99,11 +110,12 @@ function buildContent(key) {
           <a href="${proj.github}" class="nano-link" target="_blank">[GITHUB]</a>
           ${proj.live !== '#' ? `<a href="${proj.live}" class="nano-link" target="_blank">[LIVE]</a>` : ''}
         </div>`).join('');
+    }
 
     case 'resume': return `
-      <div class="nano-section"><div class="nano-h1">📄 Resume</div></div>
+      <div class="nano-section"><div class="nano-h1">Resume</div></div>
       ${PORTFOLIO.resume_pdf !== '#'
-        ? `<div style="margin-bottom:14px;"><a href="${PORTFOLIO.resume_pdf}" class="nano-link" target="_blank">[⬇ DOWNLOAD PDF]</a></div>`
+        ? `<div style="margin-bottom:14px;"><a href="${PORTFOLIO.resume_pdf}" class="nano-link" target="_blank">[DOWNLOAD PDF]</a></div>`
         : ''}
       <div class="nano-section">
         <div class="nano-h2">// Experience</div>
@@ -117,15 +129,22 @@ function buildContent(key) {
       <hr class="nano-divider">
       <div class="nano-section">
         <div class="nano-h2">// Education</div>
+        ${PORTFOLIO.education.map(ed => `
         <div class="nano-card">
-          <div class="nano-card-title">${PORTFOLIO.education.school}</div>
-          <div class="nano-card-meta">${PORTFOLIO.education.degree} &nbsp;|&nbsp; ${PORTFOLIO.education.dates}</div>
-          <div class="nano-text">GPA: ${PORTFOLIO.education.gpa} &nbsp;|&nbsp; ${PORTFOLIO.education.details}</div>
-        </div>
-      </div>`;
+          <div class="nano-card-title">${ed.school}</div>
+          <div class="nano-card-meta">${ed.degree} &nbsp;|&nbsp; ${ed.dates}</div>
+          <div class="nano-text">GPA: ${ed.gpa} &nbsp;|&nbsp; ${ed.details}</div>
+        </div>`).join('')}
+      </div>
+      ${(PORTFOLIO.honors || []).length ? `
+      <hr class="nano-divider">
+      <div class="nano-section">
+        <div class="nano-h2">// Honors</div>
+        ${PORTFOLIO.honors.map(h => `<div class="nano-text">${h}</div>`).join('')}
+      </div>` : ''}`;
 
     case 'contact': return `
-      <div class="nano-section"><div class="nano-h1">📬 Contact</div></div>
+      <div class="nano-section"><div class="nano-h1">Contact</div></div>
       <div class="nano-section">
         <div class="nano-text" style="margin-bottom:16px;">${PORTFOLIO.contact_message}</div>
         <div class="nano-row"><span class="nano-key-label">EMAIL:</span>

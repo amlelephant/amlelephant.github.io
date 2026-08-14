@@ -3,31 +3,64 @@
 //  Reads content from PORTFOLIO (data.js), no server needed
 // ═══════════════════════════════════════════════════════════
 
+// ── Custom icon art ────────────────────────────────────────
+//  Drop your own icons into images/icons/ as PNGs named below and they
+//  replace the emoji automatically — no code change needed. Until a file
+//  exists, the emoji fallback renders instead, so nothing ever looks broken.
+//
+//    images/icons/about.png        images/icons/mycomputer.png
+//    images/icons/projects.png     images/icons/terminal.png
+//    images/icons/resume.png       images/icons/drive-c.png
+//    images/icons/contact.png      images/icons/drive-d.png
+//    images/icons/email.png        images/icons/github.png
+//    images/icons/linkedin.png
+//
+//  32x32 or 48x48 PNG with a transparent background matches XP best.
+const ICON_DIR = "images/icons/";
+
+/**
+ * Render an icon slot. Returns an <img> pointing at the custom art; if that
+ * file is missing the image swaps itself for the `fallback` text (an emoji,
+ * or "" for nothing at all).
+ */
+function icon(name, fallback = "", cls = "") {
+  const fb = String(fallback).replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+  return `<img src="${ICON_DIR}${name}.png" alt="" class="${cls}"
+     onerror="this.replaceWith(Object.assign(document.createElement('span'),`
+   + `{className:'${cls}',textContent:'${fb}'}))">`;
+}
+
 // ── Page definitions ───────────────────────────────────────
+//  `icon` is the custom-art name, `emoji` the fallback until art exists.
 const PAGES = {
   about: {
     title: "About Me",
-    icon:  "👤",
+    icon:  "about",
+    emoji: "👤",
     render: renderAbout,
   },
   projects: {
     title: "Projects",
-    icon:  "🚀",
+    icon:  "projects",
+    emoji: "🚀",
     render: renderProjects,
   },
   resume: {
     title: "Resume",
-    icon:  "📄",
+    icon:  "resume",
+    emoji: "📄",
     render: renderResume,
   },
   contact: {
     title: "Contact",
-    icon:  "📬",
+    icon:  "contact",
+    emoji: "📬",
     render: renderContact,
   },
   mycomputer: {
     title: "My Computer",
-    icon:  "🖥️",
+    icon:  "mycomputer",
+    emoji: "🖥️",
     render: renderMyComputer,
   },
 };
@@ -56,19 +89,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const pg = PAGES[key];
 
     // Desktop icon
-    const icon = document.createElement('div');
-    icon.className = 'xp-icon';
-    icon.id = `icon-${key}`;
-    icon.innerHTML = `<div class="xp-icon-img">${pg.icon}</div>
+    const iconEl = document.createElement('div');
+    iconEl.className = 'xp-icon';
+    iconEl.id = `icon-${key}`;
+    iconEl.innerHTML = `<div class="xp-icon-img">${icon(pg.icon, pg.emoji)}</div>
                       <div class="xp-icon-label">${pg.title}</div>`;
-    icon.addEventListener('click',   () => selectIcon(key));
-    icon.addEventListener('dblclick', () => openWindow(key));
-    iconContainer.appendChild(icon);
+    iconEl.addEventListener('click',   () => selectIcon(key));
+    iconEl.addEventListener('dblclick', () => openWindow(key));
+    iconContainer.appendChild(iconEl);
 
     // Start menu entry
     const smItem = document.createElement('div');
     smItem.className = 'xp-startmenu-item';
-    smItem.innerHTML = `<span>${pg.icon}</span><span>${pg.title}</span>`;
+    smItem.innerHTML = `<span>${icon(pg.icon, pg.emoji)}</span><span>${pg.title}</span>`;
     smItem.addEventListener('click', () => { openWindow(key); toggleStartMenu(); });
     smLeft.appendChild(smItem);
   });
@@ -77,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const mcIcon = document.createElement('div');
   mcIcon.className = 'xp-icon';
   mcIcon.id = 'icon-mycomputer';
-  mcIcon.innerHTML = `<div class="xp-icon-img">🖥️</div><div class="xp-icon-label">My Computer</div>`;
+  mcIcon.innerHTML = `<div class="xp-icon-img">${icon('mycomputer', '🖥️')}</div><div class="xp-icon-label">My Computer</div>`;
   mcIcon.addEventListener('click',   () => selectIcon('mycomputer'));
   mcIcon.addEventListener('dblclick', () => openWindow('mycomputer'));
   iconContainer.appendChild(mcIcon);
@@ -86,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const crtIcon = document.createElement('div');
   crtIcon.className = 'xp-icon';
   crtIcon.id = 'icon-crt';
-  crtIcon.innerHTML = `<div class="xp-icon-img">📟</div><div class="xp-icon-label">Terminal</div>`;
+  crtIcon.innerHTML = `<div class="xp-icon-img">${icon('terminal', '📟')}</div><div class="xp-icon-label">Terminal</div>`;
   crtIcon.title = 'Double-click to find out...';
   crtIcon.addEventListener('click',   () => selectIcon('crt'));
   crtIcon.addEventListener('dblclick', () => { window.location.href = 'crt.html'; });
@@ -162,7 +195,7 @@ async function openWindow(pageId) {
 
   const taskBtn = document.createElement('div');
   taskBtn.className = 'xp-task-btn active';
-  taskBtn.innerHTML = `<span>${pg.icon}</span><span>${pg.title}</span>`;
+  taskBtn.innerHTML = `<span>${icon(pg.icon, pg.emoji)}</span><span>${pg.title}</span>`;
   taskBtn.onclick = () => toggleWindowFromTaskbar(pageId);
   document.getElementById('taskbar-tasks').appendChild(taskBtn);
 
@@ -173,7 +206,7 @@ async function openWindow(pageId) {
 function buildWindowShell(pageId, pg) {
   return `
     <div class="xp-titlebar" ondblclick="maximizeWindow('${pageId}')">
-      <span class="xp-title-icon">${pg.icon}</span>
+      <span class="xp-title-icon">${icon(pg.icon, pg.emoji)}</span>
       <span class="xp-title-text">${pg.title}</span>
       <div class="xp-title-buttons">
         <div class="xp-btn minimize" onclick="minimizeWindow('${pageId}')" title="Minimize">_</div>
@@ -188,7 +221,7 @@ function buildWindowShell(pageId, pg) {
       <span class="xp-menu-item">Help</span>
     </div>
     <div class="xp-toolbar">
-      <button class="xp-toolbar-btn" onclick="openWindow('about')">🏠 Home</button>
+      <button class="xp-toolbar-btn" onclick="openWindow('about')">Home</button>
     </div>
     <div class="xp-addressbar">
       <span class="xp-address-label">Address</span>
@@ -214,7 +247,7 @@ function renderAbout() {
               <div style="margin-top:4px;">GPA: ${proj.gpa} &nbsp;|&nbsp; ${proj.details}</div>
     </div>`).join('');
   return `
-    <div class="xp-page-title">👤 About Me</div>
+    <div class="xp-page-title">About Me</div>
     <div class="xp-profile-grid">
       <div class="xp-profile-card">
         <img src="images/profile.jpg"
@@ -225,18 +258,18 @@ function renderAbout() {
       </div>
       <div>
         <div class="xp-section">
-          <div class="xp-section-title">📋 Bio</div>
+          <div class="xp-section-title">Bio</div>
           <p style="color:#333;">${p.bio}</p>
         </div>
         <div class="xp-section" style="margin-top:12px;">
-          <div class="xp-info-row"><span class="xp-info-key">📍 Location:</span>${p.location}</div>
-          <div class="xp-info-row"><span class="xp-info-key">✉️ Email:</span>
+          <div class="xp-info-row"><span class="xp-info-key">Location:</span>${p.location}</div>
+          <div class="xp-info-row"><span class="xp-info-key">Email:</span>
             <a href="mailto:${p.email}" class="xp-link">${p.email}</a></div>
-          <div class="xp-info-row"><span class="xp-info-key">💻 GitHub:</span>
+          <div class="xp-info-row"><span class="xp-info-key">GitHub:</span>
             <a href="${p.github}" class="xp-link" target="_blank">${p.github.replace('https://','')}</a></div>
-          <div class="xp-info-row"><span class="xp-info-key">🔗 LinkedIn:</span>
+          <div class="xp-info-row"><span class="xp-info-key">LinkedIn:</span>
             <a href="${p.linkedin}" class="xp-link" target="_blank">${p.linkedin.replace('https://','')}</a></div>
-            <div class="xp-info-row"><span class="xp-info-key">🤖 Leetcode:</span>
+            <div class="xp-info-row"><span class="xp-info-key">Leetcode:</span>
             <a href="${p.leetcode}" class="xp-link" target="_blank">${p.leetcode.replace('https://','')}</a></div>
         </div>
       </div>
@@ -244,11 +277,11 @@ function renderAbout() {
     <div class="xp-section">
       
       <div class="xp-section">
-            <div class="xp-section-title">🎓 Education</div>${sch}
+            <div class="xp-section-title">Education</div>${sch}
           </div>
     
     <div class="xp-section">
-      <div class="xp-section-title">🔧 Technical Skills</div>
+      <div class="xp-section-title">Technical Skills</div>
       <div>${p.skills.map(s => `<span class="xp-skill-tag">${s}</span>`).join('')}</div>
     </div>`;
 }
@@ -258,7 +291,7 @@ async function renderProjects() {
  
   // If GitHub fetch returned nothing, show a friendly message
   if (!repos.length) {
-    return `<div class="xp-page-title">🚀 Projects</div>
+    return `<div class="xp-page-title">Projects</div>
             <p style="color:#888;font-size:12px;">Could not load projects from GitHub. Check your username in data.js.</p>`;
   }
  
@@ -266,15 +299,15 @@ async function renderProjects() {
     <div class="xp-project-card">
       <div class="xp-project-title">${i+1}. ${proj.name}
         <span style="font-size:10px;font-weight:400;color:#666;margin-left:8px;">${proj.year}</span>
-        ${proj.stars > 0 ? `<span style="font-size:10px;color:#888;margin-left:8px;">⭐ ${proj.stars}</span>` : ''}
+        ${proj.stars > 0 ? `<span style="font-size:10px;color:#888;margin-left:8px;">${proj.stars} star${proj.stars !== 1 ? 's' : ''}</span>` : ''}
       </div>
       <p style="color:#333;margin-bottom:6px;">${proj.description}</p>
       <div style="margin-bottom:6px;">${proj.tech.map(t => `<span class="xp-skill-tag">${t}</span>`).join('')}</div>
-      <a href="${proj.github}" class="xp-link" target="_blank">📁 GitHub</a>
-      ${proj.live !== '#' ? `<a href="${proj.live}" class="xp-link" target="_blank">🌐 Live Demo</a>` : ''}
+      <a href="${proj.github}" class="xp-link" target="_blank">GitHub</a>
+      ${proj.live !== '#' ? `<a href="${proj.live}" class="xp-link" target="_blank">Live Demo</a>` : ''}
     </div>`).join('');
  
-  return `<div class="xp-page-title">🚀 Projects</div>
+  return `<div class="xp-page-title">Projects</div>
           <p style="color:#555;margin-bottom:14px;">
             ${repos.length} public repo${repos.length !== 1 ? 's' : ''} from
             <a href="${PORTFOLIO.github}" class="xp-link" target="_blank">GitHub</a>
@@ -293,7 +326,7 @@ function renderResume() {
   const pdfBtn = p.resume_pdf !== '#'
     ? `<a href="${p.resume_pdf}" target="_blank" class="xp-link"
           style="display:inline-block;padding:4px 12px;background:linear-gradient(180deg,#e8f4ff,#c8dff8);border:1px solid #7f9db9;border-radius:2px;text-decoration:none;margin-bottom:14px;">
-        ⬇ Download Resume PDF
+        Download Resume PDF
        </a>` : '';
 
   
@@ -304,39 +337,47 @@ function renderResume() {
               <div style="margin-top:4px;">GPA: ${proj.gpa} &nbsp;|&nbsp; ${proj.details}</div>
     </div>`).join('');
 
-  return `<div class="xp-page-title">📄 Resume</div>
+  const honors = (p.honors || []).length
+    ? `<div class="xp-section">
+         <div class="xp-section-title">Honors</div>
+         ${p.honors.map(h => `<div style="margin:2px 0;">${h}</div>`).join('')}
+       </div>`
+    : '';
+
+  return `<div class="xp-page-title">Resume</div>
           ${pdfBtn}
           <div class="xp-section">
-            <div class="xp-section-title">💼 Experience</div>${exp}
+            <div class="xp-section-title">Experience</div>${exp}
           </div>
           <div class="xp-section">
-            <div class="xp-section-title">🎓 Education</div>${sch}
-          </div>`;
+            <div class="xp-section-title">Education</div>${sch}
+          </div>
+          ${honors}`;
 }
 
 function renderContact() {
   const p = PORTFOLIO;
   return `
-    <div class="xp-page-title">📬 Contact</div>
+    <div class="xp-page-title">Contact</div>
     <p style="color:#333;margin-bottom:18px;">${p.contact_message}</p>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;">
       <a href="mailto:${p.email}" style="text-decoration:none;">
         <div class="xp-project-card" style="text-align:center;cursor:pointer;">
-          <div style="font-size:32px;margin-bottom:6px;">✉️</div>
+          <div class="xp-card-icon">${icon('email')}</div>
           <div style="font-weight:700;color:#003c74;">Email</div>
           <div class="xp-link" style="margin:0;">${p.email}</div>
         </div>
       </a>
       <a href="${p.github}" target="_blank" style="text-decoration:none;">
         <div class="xp-project-card" style="text-align:center;cursor:pointer;">
-          <div style="font-size:32px;margin-bottom:6px;">💻</div>
+          <div class="xp-card-icon">${icon('github')}</div>
           <div style="font-weight:700;color:#003c74;">GitHub</div>
           <div class="xp-link" style="margin:0;">View my projects</div>
         </div>
       </a>
       <a href="${p.linkedin}" target="_blank" style="text-decoration:none;">
         <div class="xp-project-card" style="text-align:center;cursor:pointer;">
-          <div style="font-size:32px;margin-bottom:6px;">🔗</div>
+          <div class="xp-card-icon">${icon('linkedin')}</div>
           <div style="font-weight:700;color:#003c74;">LinkedIn</div>
           <div class="xp-link" style="margin:0;">Connect with me</div>
         </div>
@@ -352,20 +393,20 @@ function renderMyComputer() {
            ondblclick="openWindow('${k}')"
            onmouseover="this.style.background='#ddeeff';this.style.borderColor='#7ab0d8'"
            onmouseout="this.style.background='';this.style.borderColor='transparent'">
-        <div style="font-size:34px;">${pg.icon}</div>
+        <div class="xp-card-icon">${icon(pg.icon, pg.emoji)}</div>
         <div style="font-size:11px;margin-top:4px;">${pg.title}</div>
       </div>`).join('');
   return `
-    <div class="xp-page-title">🖥️ My Computer</div>
+    <div class="xp-page-title">My Computer</div>
     <div class="xp-section-title" style="margin-bottom:10px;">Portfolio Pages</div>
     <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;">${icons}</div>
     <div class="xp-section-title" style="margin-bottom:10px;">Drives</div>
     <div style="display:flex;gap:10px;flex-wrap:wrap;">
-      ${[{icon:'💿',label:'Local Disk (C:)',detail:'420 GB free'},{icon:'📀',label:'CD Drive (D:)',detail:'Portfolio v1.0'}]
+      ${[{icon:'drive-c',emoji:'💿',label:'Local Disk (C:)',detail:'420 GB free'},{icon:'drive-d',emoji:'📀',label:'CD Drive (D:)',detail:'Portfolio v1.0'}]
         .map(d=>`<div style="text-align:center;cursor:pointer;padding:10px 14px;border:1px solid transparent;border-radius:2px;"
                       onmouseover="this.style.background='#ddeeff';this.style.borderColor='#7ab0d8'"
                       onmouseout="this.style.background='';this.style.borderColor='transparent'">
-                  <div style="font-size:34px;">${d.icon}</div>
+                  <div class="xp-card-icon">${icon(d.icon, d.emoji)}</div>
                   <div style="font-size:11px;font-weight:700;">${d.label}</div>
                   <div style="font-size:10px;color:#555;">${d.detail}</div>
                  </div>`).join('')}

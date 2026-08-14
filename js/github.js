@@ -52,6 +52,11 @@ const TOPIC_LABELS = {
   "micropython":            "MicroPython",
   "pytorch":                "PyTorch",
   "yolov8":                 "YOLOv8",
+
+  // Cube-Solver topics — these rendered as raw slugs when the repo went public.
+  "rubiks-cube":            "Rubik's Cube",
+  "ml":                     "Machine Learning",
+  "django-rest-framework":  "Django REST Framework",
 };
 
 // Language → readable label map (extend as needed)
