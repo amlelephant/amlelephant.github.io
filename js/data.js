@@ -38,15 +38,23 @@ const PORTFOLIO = {
   // does), so a static site cannot read them — this list is the stand-in.
   // Whenever you re-pin on GitHub, mirror the new order here.
   //
-  // Last synced to pins: 2026-08-14
+  // Last synced to pins: 2026-08-18
   github_featured: [
     "Cube-Solver",
     "amlelephant.github.io",
-    "Financial-Trading-Platform-algos",
+    "strategy-lab",
     "Drone",
     "journal",
     "piPicoFishTankFiller",
   ],
+
+  // Override the auto-computed creation year for a specific repo. Almost
+  // nothing needs this — the year a repo was created is normally the year
+  // the work happened — but strategy-lab consolidates research that started
+  // in 2025 under a repo that wasn't created until 2026.
+  github_year_overrides: {
+    "strategy-lab": "2025–2026",
+  },
 
   // ── Education ──────────────────────────────────────────────
   education: [

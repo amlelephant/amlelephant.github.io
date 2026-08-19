@@ -34,6 +34,9 @@ const TOPIC_LABELS = {
   "alpaca-api":             "Alpaca API",
   "quantitative-finance":   "Quantitative Finance",
   "statistical-arbitrage":  "Statistical Arbitrage",
+  "algorithmic-trading":    "Algorithmic Trading",
+  "backtesting":            "Backtesting",
+  "pandas":                 "Pandas",
   "raspberry-pi":           "Raspberry Pi",
   "encryption-decryption":  "Cryptography",
   "windows-desktop":        "Windows Desktop",
@@ -110,6 +113,7 @@ async function fetchGitHubProjects() {
     if (!res.ok) throw new Error(`GitHub API ${res.status}`);
 
     const repos = await res.json();
+    const yearOverrides = PORTFOLIO.github_year_overrides || {};
 
     _reposCache = repos
       .filter(r => !r.fork)                        // skip forks
@@ -123,7 +127,12 @@ async function fetchGitHubProjects() {
             : r.language ? [LANG_LABELS[r.language] || r.language] : [],
         github:      r.html_url,
         live:        r.homepage && r.homepage !== "" ? r.homepage : "#",
-        year:        new Date(r.created_at).getFullYear().toString(),
+        // The repo's creation date is the right year for almost everything
+        // here, but not for one that consolidates work that started well
+        // before the repo itself did — github_year_overrides in data.js is
+        // the escape hatch for that.
+        year:        yearOverrides[r.name]
+                     || new Date(r.created_at).getFullYear().toString(),
         pushed:      new Date(r.pushed_at).getTime(),
         stars:       r.stargazers_count,
         forks:       r.forks_count,
